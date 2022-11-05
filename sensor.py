@@ -6,6 +6,8 @@ ERROR_MSG = """Usage:
 \nsensor.py c to print continuously
 \nsensor.py defualts to print a snapshot\n"""
 
+EVENT_ATTRS = ["TimeGenerated", "EventType", "EventCategory", "Data", "StringInserts"]
+
 
 def print_snapshot():
     hand = win32evtlog.OpenEventLog("localhost", "Security")
@@ -17,7 +19,11 @@ def print_snapshot():
     # print(dir(events[0]))
 
     for event in events:
-        print(event.TimeGenerated, event.EventType, event.EventCategory, event.Data, event.StringInserts)
+        for attr in EVENT_ATTRS:
+            print(getattr(event, attr), end = " ")
+        print()
+
+        # print(event.TimeGenerated, event.EventType, event.EventCategory, event.Data, event.StringInserts)
         # break
 
 def continuously_print_events():
