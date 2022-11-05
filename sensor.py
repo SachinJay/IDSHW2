@@ -2,7 +2,7 @@ import win32evtlog
 import sys
 
 LOGT1 = "System"
-LOGT1 = "Security"
+LOGT2 = "Security"
 
 
 ERROR_MSG = """Usage:
@@ -13,9 +13,8 @@ ERROR_MSG = """Usage:
 EVENT_ATTRS = ["TimeGenerated", "EventType", "EventCategory", "Data", "StringInserts", "SourceName"]
 
 
-def con2():
+def continuously_print_events(logtype=LOGT1):
 
-    logtype = "Security"
     hand = win32evtlog.OpenEventLog("localhost", logtype)
     flags = win32evtlog.EVENTLOG_BACKWARDS_READ|win32evtlog.EVENTLOG_SEQUENTIAL_READ
     total = win32evtlog.GetNumberOfEventLogRecords(hand)
@@ -24,8 +23,8 @@ def con2():
 
     while 1:
         events = win32evtlog.ReadEventLog(hand, flags, 0)
-        if not events:
-            break
+        # if not events:
+        #     break
         for event in events:
             for attr in EVENT_ATTRS:
                 print(getattr(event, attr), end = " ")
@@ -69,10 +68,6 @@ def print_snapshot():
         # print(event.TimeGenerated, event.EventType, event.EventCategory, event.Data, event.StringInserts)
         # break
 
-def continuously_print_events():
-    while(1):
-        print_snapshot()
-
 def print_error_msg():
     print(ERROR_MSG)
 
@@ -86,7 +81,7 @@ def driver():
 
     if len(sys.argv) == 2:
         if sys.argv[1] == 'c':
-            con2()
+            continuously_print_events()
         elif sys.argv[1] == 's':
             print_snapshot()
         else:
