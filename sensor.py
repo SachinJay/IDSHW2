@@ -13,18 +13,10 @@ ERROR_MSG = """Usage:
 EVENT_ATTRS = ["TimeGenerated", "EventType", "EventCategory", "Data", "StringInserts", "SourceName"]
 
 
-def log_types():
-    h = win32evtlog.EvtOpenChannelEnum(None)
-
-    while win32evtlog.EvtNextChannelPath(h) is not None:
-        
-        print(win32evtlog.EvtNextChannelPath(h))
-
-
 def con2():
 
-    logtype = "Application"
-    hand = win32evtlog.OpenEventLog("localhost", "System")
+    logtype = "Security"
+    hand = win32evtlog.OpenEventLog("localhost", logtype)
     flags = win32evtlog.EVENTLOG_BACKWARDS_READ|win32evtlog.EVENTLOG_SEQUENTIAL_READ
     total = win32evtlog.GetNumberOfEventLogRecords(hand)
 
