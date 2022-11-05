@@ -1,8 +1,8 @@
 import win32evtlog
 import sys
 
-LOGT1 = "System"
-LOGT2 = "Security"
+SYSTEM = "System"
+SECURITY = "Security"
 
 
 ERROR_MSG = """Usage:
@@ -10,10 +10,14 @@ ERROR_MSG = """Usage:
 \nsensor.py c to print continuously
 \nsensor.py defualts to print a snapshot\n"""
 
-EVENT_ATTRS = ["TimeGenerated", "EventType", "EventCategory", "Data", "StringInserts", "SourceName"]
+EVENT_ATTRS = ["TimeGenerated", "EventType", "EventCategory", "StringInserts"]
 
+def continuously_log_events(logtype=SECURITY):
+    pass
 
-def continuously_print_events(logtype=LOGT1):
+def continuously_print_events(logtype=SECURITY):
+
+    print(f"Log type is {logtype}")
 
     hand = win32evtlog.OpenEventLog("localhost", logtype)
     flags = win32evtlog.EVENTLOG_BACKWARDS_READ|win32evtlog.EVENTLOG_SEQUENTIAL_READ
