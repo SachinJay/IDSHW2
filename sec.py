@@ -13,7 +13,7 @@ from constants import EVENT_ATTRS
 
 def is_bad_path(path : str) -> bool:
     """
-    Returns true if this path makes the even skippable
+    Returns true if this path makes the event skippable
     """    
 
     if path in BLOCKED_PATHS:

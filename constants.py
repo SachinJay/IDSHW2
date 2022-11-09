@@ -18,7 +18,8 @@ BLOCKED_PATHS = ["C:\\Users\\sachi\\OneDrive",
 "C:\\Users\\sachi\\OneDrive\\Desktop", 
 "C:\\Users\\sachi\\OneDrive\\Desktop\\Microsoft Edge.lnk",
 "C:\\Users\\sachi\\OneDrive\\Desktop\\MinGW Installer.lnk",
-"C:\\Users\\sachi\\OneDrive\\desktop.ini"]
+"C:\\Users\\sachi\\OneDrive\\desktop.ini",
+"C:\\Users\\sachi\\OneDrive\\Desktop\\desktop.ini"]
 
 BLOCKED_DIRS = ["\\.git", "\\G++", "\\commons-math", "\\openmrs-core",
  "\\Desktop\\hw-1", "\\Desktop\\TestOutput", "\\Desktop\\TestInput",
