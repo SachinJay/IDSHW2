@@ -161,3 +161,6 @@ cython_debug/
 
 # Test files
 *.txt
+
+# csv files used for data collection
+*.csv

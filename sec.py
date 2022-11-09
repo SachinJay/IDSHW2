@@ -4,9 +4,10 @@ Experiment with how security logs are printed
 from time import sleep
 from utils import convert_windows_date
 import win32evtlog
+import csv
 
 
-from constants import BLOCKED_DIRS, BLOCKED_PATHS, SECURITY, STRING_ATRR, TIME_ATTR
+from constants import BLOCKED_DIRS, BLOCKED_PATHS, DATA_FILE, SECURITY, STRING_ATRR, TIME_ATTR
 from constants import EVENT_ATTRS
 
 
@@ -62,6 +63,7 @@ def clean_sec_value(attr, value):
             value = file_str,hex
         except Exception as e:
             print(f"This value caused failure: {value} with error {e}")
+            return None
 
     if attr == TIME_ATTR:
         value = convert_windows_date(str(value))
@@ -81,26 +83,80 @@ def print_sec():
             break
         if events:
             for event in events:
+
                 if can_skip_event(event):
                     # If we can skip this event, go to the next event
                     continue
+
+                row = []
+                event_parsed = True
 
                 for attr in EVENT_ATTRS:
 
                     value = getattr(event, attr)
                     value = clean_sec_value(attr, value)
-                    print(value, end = " ")
-                print()
+                    event_parsed = value is not None
+                    if isinstance(value, tuple):
+                        for element in value:
+                            row.append(element)
+                    else:
+                        row.append(value)
+                if event_parsed:
+                    print(row)
 
     win32evtlog.CloseEventLog(hand)
 
-def print_sec_every_min():
+def write_sec():
+    print(f"writing security logs in the last minue only I think, to csv")
+
+    csv_file = open(DATA_FILE, 'a', newline='')
+    writer = csv.writer(csv_file, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+
+    print(f"Printing security logs in the last minue only I think")
+
+    hand = win32evtlog.OpenEventLog("localhost", SECURITY)
+    flags = win32evtlog.EVENTLOG_BACKWARDS_READ|win32evtlog.EVENTLOG_SEQUENTIAL_READ
+   
+
     while 1:
-        print_sec()
+        events = win32evtlog.ReadEventLog(hand, flags, 0)
+        if not events:
+            break
+        if events:
+            for event in events:
+
+                if can_skip_event(event):
+                    # If we can skip this event, go to the next event
+                    continue
+
+                row = []
+                event_parsed = True
+
+                for attr in EVENT_ATTRS:
+
+                    value = getattr(event, attr)
+                    value = clean_sec_value(attr, value)
+                    event_parsed = value is not None
+                    if isinstance(value, tuple):
+                        for element in value:
+                            row.append(element)
+                    else:
+                        row.append(value)
+                if event_parsed:
+                    writer.writerow(row)
+
+    win32evtlog.CloseEventLog(hand)
+    csv_file.close()
+
+def every_min(func):
+    while 1:
+        func()
         sleep(60)
 
+
+
 def main():
-    print_sec_every_min()
+    every_min(write_sec)
 
 if __name__ == "__main__":
     main()
