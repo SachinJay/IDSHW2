@@ -17,11 +17,11 @@ def filter_sec(attr, value):
             value = value[6:8]
             file_str = value[0]
             hex = value[1]
-            hex = int(str(hex))
+            hex = int(str(hex), base=16)
 
             value = file_str,hex
-        except:
-            print(f"This value caused failure: {value}")
+        except Exception as e:
+            print(f"This value caused failure: {value} with error {e}")
 
     if attr == TIME_ATTR:
         value = convert_windows_date(str(value))
