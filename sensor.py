@@ -1,16 +1,15 @@
 import win32evtlog
 import sys
 
-SYSTEM = "System"
-SECURITY = "Security"
-
+from constants import SECURITY
+from constants import SYSTEM
+from constants import EVENT_ATTRS
 
 ERROR_MSG = """Usage:
 \nsensor.py s to print a snapshot
 \nsensor.py c to print continuously
 \nsensor.py defualts to print a snapshot\n"""
 
-EVENT_ATTRS = ["TimeGenerated", "EventType", "EventCategory", "StringInserts"]
 
 def continuously_log_events(logtype=SECURITY):
     pass
@@ -27,13 +26,14 @@ def continuously_print_events(logtype=SECURITY):
 
     while 1:
         events = win32evtlog.ReadEventLog(hand, flags, 0)
-        # if not events:
-        #     break
-        for event in events:
-            for attr in EVENT_ATTRS:
-                print(getattr(event, attr), end = " ")
-            # After we print out one line, create a new line for the next event
-            print()
+        if not events:
+            break
+        if events:
+            for event in events:
+                for attr in EVENT_ATTRS:
+                    print(getattr(event, attr), end = " ")
+                # After we print out one line, create a new line for the next event
+                print()
         # num = num + len(events)
 
     win32evtlog.CloseEventLog(hand)
@@ -81,7 +81,7 @@ def driver():
     print(EVENT_ATTRS)
 
     if len(sys.argv) == 1:
-        print_snapshot()
+        continuously_print_events()
 
     if len(sys.argv) == 2:
         if sys.argv[1] == 'c':
