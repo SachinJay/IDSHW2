@@ -5,6 +5,9 @@ from constants import SECURITY
 from constants import SYSTEM
 from constants import EVENT_ATTRS
 
+from sec import write_sec
+from sec import every_min
+
 ERROR_MSG = """Usage:
 \nsensor.py s to print a snapshot
 \nsensor.py c to print continuously
@@ -76,7 +79,7 @@ def print_error_msg():
     print(ERROR_MSG)
 
 
-def driver():
+def driver_old():
 
     print(EVENT_ATTRS)
 
@@ -91,6 +94,10 @@ def driver():
         else:
             print_error_msg()
             exit(1)
+
+def driver():
+    # see sec.py for more details
+    every_min(write_sec)
 
 
     
