@@ -19,7 +19,7 @@ WAIT_TIME = 10
 TEST_FILES = [TEST, TEST2, TEST3]
 
 
-def do():
+def write():
 
     for file_name in TEST_FILES:
         file = open(file_name, 'w')
@@ -40,13 +40,18 @@ def clean():
     for file_name in TEST_FILES:
         os.remove(file_name)
 
-def main():
+def do():
     """
     Writes the files, waits, then deletes the files
     """
-    do()
+    write()
     time.sleep(WAIT_TIME)
     clean()
+    time.sleep(WAIT_TIME)
+
+def main():
+    while 1:
+        do()   
 
 
 

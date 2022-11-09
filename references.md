@@ -10,3 +10,5 @@ The following are some of the site I used to develop `sensor.py`
 - [Learning win32evtlog in python](https://stackoverflow.com/questions/42944791/reading-windows-event-log-using-win32evtlog-module)
     - This showed me how to get all possible log types. I used it to implement
     the main functionality of `logtypes.py`
+- [Python datetime object](https://www.digitalocean.com/community/tutorials/python-string-to-datetime-strptime)
+    - for converting datetime in the logs to usable features
