@@ -76,6 +76,15 @@ discriminate if a user was me or not so I included this feature.
 
 # Code
 
+The functions in my code have detailed docstrings, however the organization
+needs some explaining.
+
+`sensor.py` contains mostly vestigial code from my initial testing. In its main
+method it calls code from `sec.py` which is where most of my implementation
+actually resides. This structures is a vestige of how I initially did some
+testing in `sensor.py` but then moved my testing of the **Security** logs to
+`sec.py`.
+
 # Model
 
 # Team Work
