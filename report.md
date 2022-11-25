@@ -114,6 +114,9 @@ Once my model was trained (took about TODO FILL IN since there was so much data)
 collected on the fifth day. This resulted in the followin
 
 # Team Work
+I worked together with Omniyyah Ibrahim. In order to record data properly, we
+swapped sensor code and ran that on each other's machines. This way, our data
+format would match what the other's model expected.
 
 # References
 
