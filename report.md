@@ -85,13 +85,39 @@ actually resides. This structures is a vestige of how I initially did some
 testing in `sensor.py` but then moved my testing of the **Security** logs to
 `sec.py`.
 
+`fix_csv.py` contains code I wrote to prepare my CSV for Weka. I had tried to
+make the code in `sec.py` write the csv as properly as possible the first time
+but there were two things I missed. 1) I Forgot to give each column a label and
+2) I did not know I needed an extra **Class** column in order for the Single
+Class SVM on Weka to work. `fix_csv.py` takes care of both these issues.
+
 # Model
+
+After reading the RUU paper, I initially planned on using a Gaussian Mixture
+Model (GMM) in order to model my "normal" behavior. However, after being unable
+to find much documentation or support for GMMs, I looked more into single-class
+anomaly detection algorithms and found out about single-class support vector
+machines (SVMs).
+
+This model had a lot more documentation in Weka and I was able to more easily
+comprehend how to get it working properly so I went with this model. To this
+end, I imported teh LibSVM module into Weka and used the single-class SVM
+mode in order to train on my data set. I used k-fold cross validation during
+testing with `k=10`.
+
+Here is a screenshot of my model as it trained:
+![my model as it trained](imgs/model_train.png)
+
+## False Positive Rate
+Once my model was trained (took about TODO FILL IN since there was so much data)
+, I used to to predict the class of my test data. That is, of the data I
+collected on the fifth day. This resulted in the followin
 
 # Team Work
 
 # References
 
-The following are some of the site I used to develop `sensor.py`
+The following are some of the sites I used to develop `sensor.py`
 
 - [Stack overflow 1](https://stackoverflow.com/questions/61003020/python-2-7-pywin32-readeventlog-returns-partial-list-of-events)
     - I used this to read the entire contents of the log
@@ -103,3 +129,4 @@ The following are some of the site I used to develop `sensor.py`
     the main functionality of `logtypes.py`
 - [Python datetime object](https://www.digitalocean.com/community/tutorials/python-string-to-datetime-strptime)
     - for converting datetime in the logs to usable features
+- [One Class SVM on Weka](https://medium.com/analytics-vidhya/using-oneclasssvm-in-weka-3908d08aabf6)
