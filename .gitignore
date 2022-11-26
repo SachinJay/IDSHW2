@@ -168,5 +168,8 @@ cython_debug/
 # venv
 ids/
 
+#Weka models
+models/
+
 # pdfs
 *.pdf
