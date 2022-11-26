@@ -108,15 +108,65 @@ testing with `k=10`.
 Here is a screenshot of my model as it trained:
 ![my model as it trained](imgs/model_train.png)
 
-## False Positive Rate
-Once my model was trained (took about TODO FILL IN since there was so much data)
-, I used to to predict the class of my test data. That is, of the data I
-collected on the fifth day. This resulted in the followin
+And after it finished:
+![My model after it finished training](imgs/model_trained.png)
+
+## False Positive Rate and Analysis
+Once my model was trained (took about 18 hours since there was so much data)
+, I used it to predict the class of my test data. That is, of the data I
+collected on the fifth day. This resulted in the following output:
+
+![Prediction output](imgs/prediction.png)
+
+One thing to note about this is that Weka cannot calculate the false positive
+rate due to the fact that there is only one class. We can however deduce it from
+the true negative rate since the only examples we fed the models were negative
+(i.e. the only instances fed to the model were normal instances). The model
+correctly predicted the class 46.9% of the time meaning that it incorrectly
+classified 53.1% of the instances as abnormal. Thus it falsely sounded the alarm
+53.1% of the time meaning the false positive rate is 53.1%.
+
+### Analysis
+A 53.1% false positive rate is fairly high. I think there are a few reasons why
+the model was not good enough to achieve a lower false positive rate.
+
+1. Features not discriminative enough
+    - I chose the minium set of features that I believed would be discriminative
+    enough to build a good model of what is my normal behaviour. However, I
+    think that it is likely that this small set of features was not enough to
+    properly build a model of my behavior. Since essenentially what I was
+    tracking was file touches and the day and time, I think the model could have
+    benefitted from more specific information about my access. E.g. file type,
+    file access duration, keystroke types etc.
+2. Not enough audit sources
+    - As I described before, I tried to pare down the number of audit sources
+    and the number of features so that the volumne of data collected would not
+    be ridiculously large. However, I fear that I may have gone too much in
+    the other direction. Perhaps collecting logs from more than just the
+    `C:\Users` directory would have made for a better model. For example the
+    `C:\ProgramFiles` directory may have given better data as it would have
+    provided information on the specific programs that I use in my day-to-day
+    use of my machine.
+3. Not Enough data
+    - I collected a large amount of data: about 161 MB with hundreds of
+    thousands of rows. However I think it is possible that the data collected
+    did not suffice to prepare the model for the test data. This is because
+    the test data was collected on a fifth day (a Friday) and the training data
+    was collected from Monday-Thursday. Because the day of the week was one of
+    my features, Friday was a hitherto unseen value for the day of the week
+    column and thus may have caused confusion in the model. 
+4. Single Class SVM may be worse than GMM for the task
+    - It also may be the case that Single Class SVM may not have been up to the
+    task of working with the mix of numerical and nominal data that I had.
+    Perhaps a GMM as described in the RUU paper would have performed better.
+
 
 # Team Work
 I worked together with Omniyyah Ibrahim. In order to record data properly, we
 swapped sensor code and ran that on each other's machines. This way, our data
 format would match what the other's model expected.
+
+
 
 # References
 
@@ -133,3 +183,4 @@ The following are some of the sites I used to develop `sensor.py`
 - [Python datetime object](https://www.digitalocean.com/community/tutorials/python-string-to-datetime-strptime)
     - for converting datetime in the logs to usable features
 - [One Class SVM on Weka](https://medium.com/analytics-vidhya/using-oneclasssvm-in-weka-3908d08aabf6)
+- [Removing unnamed columns from a csv](https://stackoverflow.com/questions/43983622/remove-unnamed-columns-in-pandas-dataframe)
