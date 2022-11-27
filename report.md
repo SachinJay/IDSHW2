@@ -166,6 +166,36 @@ I worked together with Omniyyah Ibrahim. In order to record data properly, we
 swapped sensor code and ran that on each other's machines. This way, our data
 format would match what the other's model expected.
 
+I was able to run Omniyyah's sensor on my machine, however Omniyyah could not
+run my sensor on her machine. Because of this, I wrote some code to transform
+her data into a format my sensor would recognize. Luckily Omniyyah recorded
+more than enough data so that I could easily transform her data into my format.
+
+The code for this transformation logic is located in `transform_omniyyah.py`.
+
+After transforming Omniyyah's data, I then ran my model on the data and got
+the following results.
+
+![results](imgs/predictionOnIntruder.png)
+
+## TP rate and analysis
+
+### TP Rate
+As we can see from the Weka results, the model "correctly classified" 52.5%
+of all instances. However, since there is only class, I had to mark Omniyyah's
+data as normal (despite the fact that it is abnormal). Thus, if my model
+was a good model, we would expect a vert low correctly classified instances rate
+since we would want most of the instances to be reported as anomalous.
+
+Instead, only 47.5% of all instances were actually found to be abnormal. That is
+the **True Positive Rate was 47.5%**
+
+### Analysis
+As stated in my previous analysis I believe my model could have become confused
+for a variety of reasons. It is this confusion that led to poor performance on
+actual anomalous behavior. Because my model was not a good model of what was
+normal, it could not properlly detect what was abnormal either.
+
 
 
 # References
