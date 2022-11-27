@@ -24,7 +24,7 @@ collected in that minute, an hour of collecting data would amass 6GB of data.
 This was obviously not feasible to gather over 4 days so I trimmed `input.txt`
 down until there was just one line left: `C:\Users`
 
-I know that this is where I do almost all of my interation with my computer's
+I know that this is where I do almost all of my interaction with my computer's
 filesystem and so I figured this would be representative of my usage profile.
 
 To recap: my sole audit source was the File System of my computer, specifically
@@ -40,7 +40,7 @@ First, I experimented with the different log types. The Windows Event Log has
 581 log types that I could discover. I used the code in `logtypes.py` (see
 references) in order to discover this. I experimented with some of the log types
 that seemed most interesting to me, specifically **System** and **Application**
-as well as the default **Security** given to us.
+as well as the default **Security** log type given to us.
 
 I tried determing which one is best by reading the documentation, but Microsoft's
 documentation on the area was sparse at best. So instead of that, I created the
@@ -63,7 +63,7 @@ discriminative.
 
 I know that the time I use my computer is a very discriminative feature since
 I only really use it within certain regular hours. So I kept the TimeGenerated
-event attribute and made converted it into two numbers. See the references for
+event attribute and converted it into two numbers. See the references for
 the resouce I used to do this. I broke the TimeGenerated attribute up into the
 day an event was generated and the hour.
 
@@ -95,13 +95,13 @@ Class SVM on Weka to work. `fix_csv.py` takes care of both these issues.
 
 After reading the RUU paper, I initially planned on using a Gaussian Mixture
 Model (GMM) in order to model my "normal" behavior. However, after being unable
-to find much documentation or support for GMMs, I looked more into single-class
-anomaly detection algorithms and found out about single-class support vector
-machines (SVMs).
+to find much documentation or support for GMMs in Weka, I looked more into
+single-class anomaly detection algorithms and found out about single-class
+support vector machines (SVMs).
 
 This model had a lot more documentation in Weka and I was able to more easily
 comprehend how to get it working properly so I went with this model. To this
-end, I imported teh LibSVM module into Weka and used the single-class SVM
+end, I imported the LibSVM module into Weka and used the single-class SVM
 mode in order to train on my data set. I used k-fold cross validation during
 testing with `k=10`.
 
@@ -134,19 +134,22 @@ the model was not good enough to achieve a lower false positive rate.
     - I chose the minium set of features that I believed would be discriminative
     enough to build a good model of what is my normal behaviour. However, I
     think that it is likely that this small set of features was not enough to
-    properly build a model of my behavior. Since essenentially what I was
+    properly build a model of my behavior. Since essentially what I was
     tracking was file touches and the day and time, I think the model could have
     benefitted from more specific information about my access. E.g. file type,
-    file access duration, keystroke types etc.
+    file access duration, etc.
 2. Not enough audit sources
     - As I described before, I tried to pare down the number of audit sources
-    and the number of features so that the volumne of data collected would not
+    and the number of features so that the volume of data collected would not
     be ridiculously large. However, I fear that I may have gone too much in
     the other direction. Perhaps collecting logs from more than just the
     `C:\Users` directory would have made for a better model. For example the
     `C:\ProgramFiles` directory may have given better data as it would have
     provided information on the specific programs that I use in my day-to-day
     use of my machine.
+    - Further more, information from sources other than the file system
+    would definitely have been helpful. For example keystroke stats
+    would be fairly discriminative for me as I have distinct keystroke patterns.
 3. Not Enough data
     - I collected a large amount of data: about 161 MB with hundreds of
     thousands of rows. However I think it is possible that the data collected
@@ -184,17 +187,18 @@ the following results.
 As we can see from the Weka results, the model "correctly classified" 52.5%
 of all instances. However, since there is only class, I had to mark Omniyyah's
 data as normal (despite the fact that it is abnormal). Thus, if my model
-was a good model, we would expect a vert low correctly classified instances rate
+was a good model, we would expect a very low correctly classified instances rate
 since we would want most of the instances to be reported as anomalous.
 
 Instead, only 47.5% of all instances were actually found to be abnormal. That is
-the **True Positive Rate was 47.5%**
+to say: the **True Positive Rate was 47.5%**
 
 ### Analysis
 As stated in my previous analysis I believe my model could have become confused
 for a variety of reasons. It is this confusion that led to poor performance on
 actual anomalous behavior. Because my model was not a good model of what was
-normal, it could not properlly detect what was abnormal either.
+normal, it could not properlly detect what was abnormal either hence the low
+true positive rate.
 
 
 
@@ -212,5 +216,6 @@ The following are some of the sites I used to develop `sensor.py`
     the main functionality of `logtypes.py`
 - [Python datetime object](https://www.digitalocean.com/community/tutorials/python-string-to-datetime-strptime)
     - for converting datetime in the logs to usable features
+- [Preliminary info on one-class SVMs](http://rvlasveld.github.io/blog/2013/07/12/introduction-to-one-class-support-vector-machines/)
 - [One Class SVM on Weka](https://medium.com/analytics-vidhya/using-oneclasssvm-in-weka-3908d08aabf6)
 - [Removing unnamed columns from a csv](https://stackoverflow.com/questions/43983622/remove-unnamed-columns-in-pandas-dataframe)
